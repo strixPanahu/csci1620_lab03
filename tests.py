@@ -19,7 +19,7 @@ class TestMethods(unittest.TestCase):
         return_value = -2
 
         test = formulas.Main(standard_values)
-        self.assertTrue(test.add() == return_value, "Failed to validate positive values' sum")
+        self.assertTrue(test.get_total() == return_value, "Failed to validate positive values' sum")
 
     def test_formulas_ok_init_one_value(self):
         standard_values = [["add", -2],
@@ -34,10 +34,10 @@ class TestMethods(unittest.TestCase):
 
             match standard_values[index][0]:
                 case "add":
-                    self.assertTrue(test.add() == return_values[index],
+                    self.assertTrue(test.get_total() == return_values[index],
                                     "Failed to validate single value summation")
                 case "subtract":
-                    self.assertTrue(test.subtract() == return_values[index],
+                    self.assertTrue(test.get_total() == return_values[index],
                                     "Failed to validate single value difference")
                 case "multiply":
                     self.assertTrue(test.multiply() == return_values[index],
@@ -56,21 +56,22 @@ class TestMethods(unittest.TestCase):
 
         for current_list in standard_values:
             test = formulas.Main(current_list)
-            self.assertTrue(test.add() == return_value, "Failed to validate zero value calculation")
+            self.assertTrue(test.get_total() == return_value, "Failed to validate zero value calculation")
 
     def test_formulas_ok_multiply_zeroes(self):
-        standard_values = [0, 2, 0, -3]
+        standard_values = ["multiply", 0, 2, 0, -3]
         return_value = -6
 
         test = formulas.Main(standard_values)
-        self.assertTrue(test.multiply() == return_value, "Failed to validate product of List[] with zeroes")
+        self.assertTrue(test.get_total() == return_value, "Failed to validate product of List[] with zeroes")
 
     def test_formulas_ok_subtract_negative_values(self):
-        standard_values = ["subtract", -1, -2, 3, -3]
-        return_value = -3
+        standard_values = ["subtract", -1, -2, 3, -3, 2]
+        return_value = 1
 
         test = formulas.Main(standard_values)
-        self.assertTrue(test.subtract() == return_value, "Failed to validate negative values' difference")
+
+        self.assertTrue(test.get_total() == return_value, "Failed to validate negative values' difference")
 
     def test_main_fail_invalid_operator(self):
         invalid_values = ["invalid", '0', '1']
@@ -178,7 +179,68 @@ class TestMethods(unittest.TestCase):
                             "Failed to validate positive random result")
             index += 1
 
-    def test_ok_main_two_values(self):
+    def test_main_ok_lab_sample_addition(self):
+        values = [["add", '1', '2'],
+                  ["add", '1', '2', "-3.5"],
+                  ["add", '-1', '2', "-3.5"]]
+
+        return_values = [0, -3.5, -4.5]
+
+        index = 0
+        output = "Answer = {:.2f}"
+        for current_list in values:
+            test = ZacSchimpf3.Main(current_list)
+            self.assertTrue(test.get_output() == output.format(return_values[index]),
+                            "Failed to validate input results")
+            index += 1
+
+    def test_main_ok_lab_sample_division(self):
+        values = [["divide", '0', '1.5'],
+                  ["divide", '-1', '1.5'],
+                  ["divide", '-1', '-1.5']]
+
+        return_values = [0, -0.67, 0.67]
+
+        index = 0
+        output = "Answer = {:.2f}"
+        for current_list in values:
+            test = ZacSchimpf3.Main(current_list)
+            self.assertTrue(test.get_output() == output.format(return_values[index]),
+                            "Failed to validate input results")
+            index += 1
+
+    def test_main_ok_lab_sample_multiplication(self):
+        values = [["multiply", '0', '0'],
+                  ["multiply", '0', '2.5'],
+                  ["multiply", '0', '2.5', '-1'],
+                  ["multiply", '0', '2.5', '-1', '-1']]
+
+        return_values = [0, 2.5, -2.5, 2.5]
+
+        index = 0
+        output = "Answer = {:.2f}"
+        for current_list in values:
+            test = ZacSchimpf3.Main(current_list)
+            self.assertTrue(test.get_output() == output.format(return_values[index]),
+                            "Failed to validate input results")
+            index += 1
+
+    def test_main_ok_lab_sample_subtraction(self):
+        values = [["subtract", '-1', '-2'],
+                  ["subtract", '-1', '2'],
+                  ["subtract", '-1', '2', '-2', '1.5']]
+
+        return_values = [0, 2, 0.5]
+
+        index = 0
+        output = "Answer = {:.2f}"
+        for current_list in values:
+            test = ZacSchimpf3.Main(current_list)
+            self.assertTrue(test.get_output() == output.format(return_values[index]),
+                            "Failed to validate input results")
+            index += 1
+
+    def test_main_ok_two_values(self):
         standard_values = [["add", '-2', '-3'],
                            ["subtract", '4', '3'],
                            ["multiply", '2', '5'],
@@ -193,21 +255,21 @@ class TestMethods(unittest.TestCase):
                             "Failed to validate input results")
             index += 1
 
-    def test_ok_main_fail_input_no_value(self):
+    def test_main_fail_input_no_value(self):
         invalid_values = []
 
         with self.assertRaises(SystemExit) as exit_handler:
             test = ZacSchimpf3.Main(invalid_values)
         self.assertEqual(exit_handler.exception.code, "Need to provide operator")
 
-    def test_ok_main_fail_input_one_value(self):
+    def test_main_fail_input_one_value(self):
         invalid_values = ["add"]
 
         with self.assertRaises(SystemExit) as exit_handler:
             test = ZacSchimpf3.Main(invalid_values)
         self.assertEqual(exit_handler.exception.code, "Need to provide at least two values")
 
-    def test_ok_main_fail_input_two_values(self):
+    def test_main_fail_input_two_values(self):
         invalid_values = ["add", '0']
 
         with self.assertRaises(SystemExit) as exit_handler:
