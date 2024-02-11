@@ -1,28 +1,6 @@
 import sys
 
 
-def __init__(input_list):
-    """
-    Calculator function process
-    :param input_list: List[] of an operator, and at least two floating-point numbers
-    """
-    choice = input_list[0]
-    total = 0
-    values = input_list[1:]
-
-    match choice:
-        case "add":
-            total = add(values)
-        case "subtract":
-            total = subtract(values)
-        case "multiply":
-            total = multiply(values)
-        case "divide":
-            total = divide(values)
-
-    return total
-
-
 def add(values):
     """
     Summation of all values less than zero
@@ -129,11 +107,3 @@ def divide(values):
                 quotient /= current_value
 
     return float(quotient)
-
-
-def get_total():
-    return 0    # .total
-
-
-if __name__ == "__main__":
-    __init__(sys.argv)

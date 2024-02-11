@@ -6,8 +6,7 @@
     05/02/2024
 """
 
-import sys
-import formulas
+from formulas import *
 
 
 def __init__(input_raw):
@@ -16,7 +15,18 @@ def __init__(input_raw):
     :param input_raw: List[] of an operator, and at least two numbers
     """
     input_list = validate_input(input_raw)
-    calculation = formulas.__init__(input_list)
+
+    calculation = 0
+
+    match input_list[0]:
+        case "add":
+            calculation = add(input_list[1:])
+        case "subtract":
+            calculation = subtract(input_list[1:])
+        case "multiply":
+            calculation = multiply(input_list[1:])
+        case "divide":
+            calculation = divide(input_list[1:])
 
     output = "Answer = {:.2f}"
     print(output.format(calculation))
@@ -53,14 +63,6 @@ def validate_input(input_raw):
         sys.exit("Failed to convert input to numeric values")
 
     return input_raw
-
-
-def get_input_raw():
-    return 0    # input_list
-
-
-def get_output():
-    return 0    # output.format(calculation.get_total())
 
 
 if __name__ == "__main__":
