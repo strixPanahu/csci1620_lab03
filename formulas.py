@@ -1,123 +1,139 @@
 import sys
 
 
-class Main:
-    def __init__(self, input_list):
-        """
-        Calculator function process
-        :param input_list: List[] of an operator, and at least two floating-point numbers
-        """
-        choice = input_list[0]
-        self.total = 0
-        self.values = input_list[1:]
+def __init__(input_list):
+    """
+    Calculator function process
+    :param input_list: List[] of an operator, and at least two floating-point numbers
+    """
+    choice = input_list[0]
+    total = 0
+    values = input_list[1:]
 
-        match choice:
-            case "add":
-                self.total = self.add()
-            case "subtract":
-                self.total = self.subtract()
-            case "multiply":
-                self.total = self.multiply()
-            case "divide":
-                self.total = self.divide()
+    match choice:
+        case "add":
+            total = add(values)
+        case "subtract":
+            total = subtract(values)
+        case "multiply":
+            total = multiply(values)
+        case "divide":
+            total = divide(values)
 
-    def add(self):
-        """
-        Summation of all values less than zero
-        :return: Summation as a float
-        """
-        summation = 0
+    return total
 
-        if len(self.values) > 0:
-            if self.values[0] < 0:  # skip non-negative value
-                summation = self.values[0]
 
-            if len(self.values[1:]) > 0:  # continue if more than one value passed
-                self.values = self.values[1:]
+def add(values):
+    """
+    Summation of all values less than zero
+    :return: Summation as a float
+    """
+    summation = 0
 
-                for current_value in self.values:
-                    if current_value < 0:  # skip non-negative values
-                        summation += current_value
+    temp_list = []
+    for current_value in values:
+        if current_value < 0:
+            temp_list.append(current_value)
+    values = temp_list
 
-        return float(summation)
+    if len(values) > 0:
+        summation = values[0]
 
-    def subtract(self):
-        """
-        Difference of all values larger than zero
-        :return: Difference as a float
-        """
+        if len(values[1:]) > 0:  # continue if more than one value passed
+            values = values[1:]
 
-        temp_list = []
-        for current_value in self.values:
-            if current_value > 0:
-                temp_list.append(current_value)
-        self.values = temp_list
+            for current_value in values:
+                summation += current_value
 
-        if len(self.values) > 0:
-            difference = self.values[0]
+    return float(summation)
 
-            if len(self.values[1:]) > 0:  # continue if more than one value passed
-                self.values = self.values[1:]
 
-                for current_value in self.values:
-                    if current_value > 0:  # skip non-positive values
-                        difference -= current_value
+def subtract(values):
+    """
+    Difference of all values larger than zero
+    :return: Difference as a float
+    """
 
-            return float(difference)
+    temp_list = []
+    for current_value in values:
+        if current_value > 0:
+            temp_list.append(current_value)
+    values = temp_list
+
+    if len(values) > 0:
+        difference = values[0]
+
+        if len(values[1:]) > 0:  # continue if more than one value passed
+            values = values[1:]
+
+            for current_value in values:
+                if current_value > 0:  # skip non-positive values
+                    difference -= current_value
+
+        return float(difference)
+    else:
+        return float(0)
+
+
+def multiply(values):
+    """
+    Product of all non-zero values
+    :return: Product as a float
+    """
+
+    temp_list = []
+    for current_value in values:
+        if current_value != 0:
+            temp_list.append(current_value)
+    values = temp_list
+
+    if len(values) > 0:
+        product = values[0]
+
+        if len(values[1:]) > 0:  # continue if more than one value passed
+            values = values[1:]
+
+            for current_value in values:
+                product *= current_value
+
+        return float(product)
+    else:
+        return float(0)
+
+
+def divide(values):
+    """
+    Quotient of all non-zero values
+    :return: Quotient as a float
+    """
+    quotient = 0
+
+    temp_list = [values[0]]
+    values = values[1:]
+
+    for current_value in values:
+        if current_value != 0:
+            temp_list.append(current_value)
         else:
-            return float(0)
+            sys.exit('Cannot divide by 0')
 
-    def multiply(self):
-        """
-        Product of all non-zero values
-        :return: Product as a float
-        """
+    values = temp_list
 
-        temp_list = []
-        for current_value in self.values:
-            if current_value != 0:
-                temp_list.append(current_value)
-        self.values = temp_list
+    if len(values) > 0:
+        quotient = values[0]
 
-        if len(self.values) > 0:
-            product = self.values[0]
+        if len(values[1:]) > 0:  # continue if more than one value passed
+            values = values[1:]
 
-            if len(self.values[1:]) > 0:  # continue if more than one value passed
-                self.values = self.values[1:]
+            for current_value in values:
+                quotient /= current_value
 
-                for current_value in self.values:
-                    if current_value != 0:  # skip zeroes
-                        product *= current_value
+    return float(quotient)
 
-            return float(product)
-        else:
-            return float(0)
 
-    def divide(self):
-        """
-        Quotient of all non-zero values
-        :return: Quotient as a float
-        """
-        quotient = 0
-
-        if len(self.values) > 0:
-            try:
-                quotient = self.values[0]
-
-                if len(self.values[1:]) > 0:  # continue if more than one value passed
-                    self.values = self.values[1:]
-
-                    for current_value in self.values:
-                        quotient /= current_value
-
-            except ZeroDivisionError:
-                sys.exit('Cannot divide by 0')
-
-        return float(quotient)
-
-    def get_total(self):
-        return self.total
+def get_total():
+    return 0    # .total
 
 
 if __name__ == "__main__":
-    Main(sys.argv)
+    __init__(sys.argv)
